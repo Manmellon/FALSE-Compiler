@@ -37,7 +37,7 @@ vector<lexeme> strToLexemes(string str)
 			}
 		}
 		else
-		{ 
+		{
 			if (readingName)
 			{
 				ans.push_back(NAME);
@@ -80,4 +80,4 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
-
+//Здесь был Саня
