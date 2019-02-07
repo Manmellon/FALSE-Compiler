@@ -67,7 +67,7 @@ vector<lexeme> strToLexemes(string str)
 int main(int argc, char **argv)
 {
 	vector<lexeme> lexemes;
-	string str = "@name+234+-*/*-name2+-#";
+	string str = "SANYA@name+234+-*/*-name2+-#";
 	lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)
 	{
