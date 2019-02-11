@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	cout<<"\n"<<endl;
 	for (size_t i=0;i<lexemes.size();i++)
 	{
-		cout<<lexemes[i];
+		cout<<lexemes[i]<<endl;
 	}
 	return 0;
 }
