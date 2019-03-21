@@ -6,6 +6,7 @@ enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
 const int STMT = ERROR+1;
 
 int curLexeme;
+vector<lexeme> lexemes;
 
 struct node
 {
@@ -19,14 +20,29 @@ node* createNode(int _type)
 	n->child1=n->child2=n->child3=NULL;
 	return n;
 }
-node* program()
+node* statement()
 {
-	node *n = createNode(STMT);
+	node *n;
 	return n;
 }
+node* program()
+{
+	//node *n = createNode(STMT);
+	//n->child1 = statement();
+	node *n = statement();
+	return n;
+}
+
 int main(int argc, char **argv)
 {
 	curLexeme = 0;
+	lexemes.push_back(FUNC_OPEN);
+	lexemes.push_back(DUP);
+	lexemes.push_back(MULT);
+	lexemes.push_back(FUNC_CLOSE);
+	lexemes.push_back(NAME);
+	lexemes.push_back((lexeme)0);//number from name's table
+	lexemes.push_back(ASSIGNMENT);
 	return 0;
 }
 
