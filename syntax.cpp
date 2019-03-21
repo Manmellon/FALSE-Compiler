@@ -3,6 +3,7 @@
 using namespace std;
 enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
 			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
+const int STMT = ERROR+1;
 struct node
 {
 	struct node *child1,*child2,*child3;
