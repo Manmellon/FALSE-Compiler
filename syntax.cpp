@@ -11,6 +11,7 @@ node* createNode(int _type)
 {
 	node *n = new node;
 	n->type = _type;
+	n->child1=n->child2=n->child3=NULL;
 	return n;
 }
 int main(int argc, char **argv)
