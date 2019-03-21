@@ -2,7 +2,8 @@
 #include <vector>
 #include <string>
 using namespace std;
-enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,ERROR};
+enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
+			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
 vector<lexeme> strToLexemes(string str)
 {
 	vector<lexeme> ans;
@@ -74,6 +75,8 @@ vector<lexeme> strToLexemes(string str)
                     case '@': ans.push_back(ROT);break;
                     case '?': ans.push_back(IF);break;
                     case '#': ans.push_back(WHILE);break;
+                    case '[': ans.push_back(FUNC_OPEN);break;
+                    case ']': ans.push_back(FUNC_CLOSE);break;
                     default:
                     {
                         ans.push_back(ERROR);
