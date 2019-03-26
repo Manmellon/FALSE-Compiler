@@ -20,9 +20,23 @@ node* createNode(int _type)
 	n->child1=n->child2=n->child3=NULL;
 	return n;
 }
+node* function()
+{
+	node *n;
+	return n;
+}
 node* statement()
 {
 	node *n;
+	if (lexemes[curLexeme]<ERROR)
+	{
+		n=createNode(lexemes[curLexeme]);
+	}
+	else
+	{
+		//case '[': break;
+        //case ']': ans.push_back(FUNC_CLOSE);break;
+	}
 	return n;
 }
 node* program()
