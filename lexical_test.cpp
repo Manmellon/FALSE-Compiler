@@ -39,13 +39,14 @@ vector<lexeme> strToLexemes(string str)
             }
             else if (str[i]>='0'&&str[i]<='9')
             {
-                if (readingName||readingNumber)
+                if (readingNumber)
                 {
                     readingStr+=str[i];
                 }
                 else
                 {
                     readingStr.clear();
+                    readingName = false;
                     readingNumber = true;
                     readingStr+=str[i];
                 }
