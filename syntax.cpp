@@ -13,13 +13,13 @@ struct node
 	struct node *child1,*child2,*child3;
 	int type, value;
 };
-node* curNode;
+node *curNode;
 
 node* createNode(int _type);
 node* function();
 node* statement();
 node* program();
-
+void printTree(node *t);
 int main(int argc, char **argv)
 {
 	curLexeme = 0;
@@ -30,6 +30,9 @@ int main(int argc, char **argv)
 	lexemes.push_back(NAME);
 	lexemes.push_back((lexeme)0);//number from name's table
 	lexemes.push_back(ASSIGNMENT);
+	
+	node *tree = program();
+	printTree(tree);
 	return 0;
 }
 
@@ -42,6 +45,7 @@ node* createNode(int _type)
 }
 node* function()
 {
+	puts("function started");
 	node *n=createNode(STMT);
 	n->child1 = createNode(FUNC_OPEN);
 	curLexeme++;
@@ -56,19 +60,22 @@ node* function()
 		}
 		else
 		{
-			
+			//Missing ']' here?
 		}
 	}
 	return n;
 }
 node* statement()
 {
+	puts("statement started");
 	node *n;
 	if (lexemes[curLexeme]<FUNC_OPEN)
 	{
 		n=createNode(lexemes[curLexeme]);
-		if(curLexeme+1<lexemes.size())
+		curLexeme++;
+		if(curLexeme<lexemes.size())
 		{
+			puts("S->SS");
 			n->child1 = n;
 			n=createNode(STMT);
 			n->child2 = statement();
@@ -101,4 +108,15 @@ node* program()
 	//n->child1 = statement();
 	node *n = statement();
 	return n;
+}
+
+void printTree(node *t)//C 1 2 3
+{
+	if(t)
+	{
+		printf("C:%d ",t->type);
+		printf("1:");printTree(t->child1);
+		printf("2:");printTree(t->child2);
+		printf("3:");printTree(t->child3);
+	}
 }
