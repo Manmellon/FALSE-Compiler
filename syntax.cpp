@@ -115,8 +115,8 @@ void printTree(node *t)//C 1 2 3
 	if(t)
 	{
 		printf("C:%d ",t->type);
-		printf("1:");printTree(t->child1);
+		printf("(1:");printTree(t->child1);
 		printf("2:");printTree(t->child2);
-		printf("3:");printTree(t->child3);
+		printf("3:");printTree(t->child3);putchar(')');
 	}
 }
