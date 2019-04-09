@@ -13,6 +13,7 @@ struct node
 	struct node *child1,*child2,*child3;
 	int type, value;
 };
+node* curNode;
 node* createNode(int _type)
 {
 	node *n = new node;
