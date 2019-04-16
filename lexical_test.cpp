@@ -25,6 +25,18 @@ vector<lexeme> strToLexemes(string str)
             if (str[i]=='\n') {lineNum++; columnNum=0;}
             if (str[i]>='a'&&str[i]<='z'||str[i]>='A'&&str[i]<='Z')
             {
+                if (readingNumber)
+                {
+                    bufNum = atoi(readingStr.c_str());
+                    flag=0;
+                    for (size_t i=0;i<nums.size();i++)
+                    {
+                        if (bufNum==nums[i]) flag=1;
+                    }
+                    if (!flag) nums.push_back(bufNum);
+                    ans.push_back(CONSTANT);
+                    readingNumber = false;
+                }
                 if (readingName)
                 {
                     readingStr+=str[i];
@@ -39,6 +51,17 @@ vector<lexeme> strToLexemes(string str)
             }
             else if (str[i]>='0'&&str[i]<='9')
             {
+                if (readingName)
+                {
+                    flag=0;
+                    for (size_t i=0;i<ids.size();i++)
+                    {
+                        if (readingStr==ids[i]) flag=1;
+                    }
+                    if (!flag) ids.push_back(readingStr);
+                    ans.push_back(NAME);
+                    readingName = false;
+                }
                 if (readingNumber)
                 {
                     readingStr+=str[i];
@@ -55,7 +78,6 @@ vector<lexeme> strToLexemes(string str)
             {
                 if (readingName)
                 {
-                    //cout <<"name "<< readingStr <<endl;
                     flag=0;
                     for (size_t i=0;i<ids.size();i++)
                     {
@@ -68,7 +90,6 @@ vector<lexeme> strToLexemes(string str)
                 else if (readingNumber)
                 {
                     bufNum = atoi(readingStr.c_str());
-                    //cout <<"num "<< bufNum <<endl;
                     flag=0;
                     for (size_t i=0;i<nums.size();i++)
                     {
@@ -106,7 +127,6 @@ vector<lexeme> strToLexemes(string str)
                         cout<<"Error: undefined symbol "<<str[i]<<" at line "<<lineNum<<", column "<<columnNum<<" \n";
                     } break;
                 }
-                //cout<<"sym "<<str[i]<<endl;
             }
         }
         else
@@ -123,14 +143,12 @@ vector<lexeme> strToLexemes(string str)
                         if (readingStr==ids[i]) flag=1;
                     }
                     if (!flag) ids.push_back(readingStr);
-                    //cout <<"name "<< readingStr <<endl;
                     ans.push_back(NAME);
                     readingName = false;
                 }
                 else if (readingNumber)
                 {
                     bufNum = atoi(readingStr.c_str());
-                    //cout <<"num "<< bufNum <<endl;
                     flag=0;
                     for (size_t i=0;i<nums.size();i++)
                     {
@@ -146,7 +164,7 @@ vector<lexeme> strToLexemes(string str)
 int main(int argc, char **argv)
 {
 	vector<lexeme> lexemes;
-	string str = "SANYA@name+ 234 6+-*/*-\nname2+-#\nfuck 99 6^99 fuck+";
+	string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
 	lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)
 	{
