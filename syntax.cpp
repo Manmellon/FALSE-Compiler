@@ -23,15 +23,29 @@ void printTree(node *t);
 int main(int argc, char **argv)
 {
 	curLexeme = 0;
-	lexemes.push_back(FUNC_OPEN);
+	/*lexemes.push_back(FUNC_OPEN);
 	lexemes.push_back(DUP);
 	lexemes.push_back(MULT);
 	lexemes.push_back(FUNC_CLOSE);
 	lexemes.push_back(NAME);
 	lexemes.push_back((lexeme)0);//number from name's table
 	lexemes.push_back(ASSIGNMENT);
+	*/
+	/*lexemes.push_back(CONSTANT);
+	lexemes.push_back(CONSTANT);
+	lexemes.push_back(MULT);
+	*/
+	lexemes.push_back(FUNC_OPEN);
+	lexemes.push_back(CONSTANT);
+	lexemes.push_back(FUNC_CLOSE);
+	lexemes.push_back(NAME);
 	
 	node *tree = program();
+	for(size_t i=0;i<lexemes.size();i++)
+	{
+		printf("%d ",lexemes[i]);
+	}
+	puts("");
 	printTree(tree);
 	return 0;
 }
@@ -58,27 +72,37 @@ node* function()
 		{
 			n->child3 = createNode(FUNC_CLOSE);
 		}
-		else
+		else if(curLexeme>=lexemes.size())
 		{
 			//Missing ']' here?
+			puts("Error: Missing ']' here");
 		}
+	}
+	if(curLexeme<lexemes.size())
+	{
+		puts("S->SS");
+		node *tmp = createNode(STMT);
+		tmp->child1 = n;
+		tmp->child2 = statement();
+		n = tmp;
 	}
 	return n;
 }
 node* statement()
 {
 	puts("statement started");
-	node *n;
+	node *n = createNode(STMT);
 	if (lexemes[curLexeme]<FUNC_OPEN)
 	{
-		n=createNode(lexemes[curLexeme]);
+		n->child1=createNode(lexemes[curLexeme]);
 		curLexeme++;
 		if(curLexeme<lexemes.size())
 		{
 			puts("S->SS");
-			n->child1 = n;
-			n=createNode(STMT);
-			n->child2 = statement();
+			node *tmp = createNode(STMT);
+			tmp->child1 = n;
+			tmp->child2 = statement();
+			n = tmp;
 		}
 	}
 	else if (lexemes[curLexeme]==FUNC_OPEN)
@@ -87,13 +111,14 @@ node* statement()
 	}
 	else if (lexemes[curLexeme]==FUNC_CLOSE)
 	{
-		if (curNode->type==FUNC_OPEN)
+		if (curNode&&curNode->type==FUNC_OPEN)
 		{
 			n = createNode(FUNC_CLOSE);//when empty []
 		}
 		else
 		{
 			//Missing '[' here
+			puts("Error: Missing '[' here");
 		}
 	}
 	else
@@ -106,6 +131,7 @@ node* program()
 {
 	//node *n = createNode(STMT);
 	//n->child1 = statement();
+	curNode = NULL;
 	node *n = statement();
 	return n;
 }
@@ -114,9 +140,14 @@ void printTree(node *t)//C 1 2 3
 {
 	if(t)
 	{
-		printf("C:%d ",t->type);
-		printf("(1:");printTree(t->child1);
-		printf("2:");printTree(t->child2);
-		printf("3:");printTree(t->child3);putchar(')');
+		//printf("(C:%d ",t->type);
+		if (t->type<STMT) printf("%d ",t->type);
+		//printf("1c:");
+		printTree(t->child1);
+		//printf("2c:");
+		printTree(t->child2);
+		//printf("3c:");
+		printTree(t->child3);
+		//printf(") ");
 	}
 }
