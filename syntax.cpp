@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -37,11 +38,14 @@ int main(int argc, char **argv)
 	lexemes.push_back(MULT);
 	*/
 	lexemes.push_back(FUNC_OPEN);
-	lexemes.push_back(CONSTANT);
+	//lexemes.push_back(CONSTANT);
 	lexemes.push_back(FUNC_OPEN);
 	lexemes.push_back(FUNC_CLOSE);
 	lexemes.push_back(NAME);
 	lexemes.push_back(FUNC_CLOSE);
+	lexemes.push_back(CONSTANT);
+    lexemes.push_back(CONSTANT);
+
 	node *tree = program();
 	for(size_t i=0;i<lexemes.size();i++)
 	{
@@ -68,6 +72,7 @@ node* function()
 	curLexeme++;
 	curNode = n->child1;
 	n->child2 = statement();
+	puts("returned to func");
 	if(n->child2==NULL)
 	{
 		n->child2 = createNode(FUNC_CLOSE);
@@ -78,6 +83,7 @@ node* function()
 	printf("%d\n",n->child2->type);
 	if (n->child2->type != FUNC_CLOSE)
 	{
+
 		if (lexemes[curLexeme]==FUNC_CLOSE)
 		{
 			n->child3 = createNode(FUNC_CLOSE);
@@ -112,7 +118,8 @@ node* statement()
 		n->child1=createNode(lexemes[curLexeme]);
 		n->child1->parent = n;
 		curLexeme++;
-		if(curLexeme<lexemes.size())
+		//TODO: Nothing do here
+		if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
 		{
 			puts("S->SS");
 			node *tmp = createNode(STMT);
@@ -121,6 +128,8 @@ node* statement()
 			tmp->parent = n->parent;
 			n = tmp;
 		}
+		//else
+        //  curLexeme--;
 	}
 	else if (lexemes[curLexeme]==FUNC_OPEN)
 	{
@@ -128,6 +137,7 @@ node* statement()
 	}
 	else if (lexemes[curLexeme]==FUNC_CLOSE)
 	{
+	    printf("curNode->type:%d\n",curNode->type);
 		if (curNode&&curNode->type==FUNC_OPEN)
 		{
 			//n = createNode(FUNC_CLOSE);//when empty []
