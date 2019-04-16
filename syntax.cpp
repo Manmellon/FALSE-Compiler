@@ -11,6 +11,7 @@ vector<lexeme> lexemes;
 struct node
 {
 	struct node *child1,*child2,*child3;
+	struct node *parent;
 	int type, value;
 };
 node *curNode;
@@ -37,9 +38,10 @@ int main(int argc, char **argv)
 	*/
 	lexemes.push_back(FUNC_OPEN);
 	lexemes.push_back(CONSTANT);
+	lexemes.push_back(FUNC_OPEN);
 	lexemes.push_back(FUNC_CLOSE);
 	lexemes.push_back(NAME);
-	
+	lexemes.push_back(FUNC_CLOSE);
 	node *tree = program();
 	for(size_t i=0;i<lexemes.size();i++)
 	{
@@ -54,7 +56,7 @@ node* createNode(int _type)
 {
 	node *n = new node;
 	n->type = _type;
-	n->child1=n->child2=n->child3=NULL;
+	n->child1=n->child2=n->child3=n->parent=NULL;
 	return n;
 }
 node* function()
@@ -62,15 +64,26 @@ node* function()
 	puts("function started");
 	node *n=createNode(STMT);
 	n->child1 = createNode(FUNC_OPEN);
+	n->child1->parent = n;
 	curLexeme++;
 	curNode = n->child1;
 	n->child2 = statement();
+	if(n->child2==NULL)
+	{
+		n->child2 = createNode(FUNC_CLOSE);
+	}
+	n->child2->parent = n;
 	curLexeme++;
+	printf("%d\n",curLexeme);
+	printf("%d\n",n->child2->type);
 	if (n->child2->type != FUNC_CLOSE)
 	{
-		if (curLexeme==FUNC_CLOSE)
+		if (lexemes[curLexeme]==FUNC_CLOSE)
 		{
 			n->child3 = createNode(FUNC_CLOSE);
+			n->child3->parent = n;
+			if (n->parent)
+				curNode = n->parent->child1;
 		}
 		else if(curLexeme>=lexemes.size())
 		{
@@ -84,8 +97,10 @@ node* function()
 		node *tmp = createNode(STMT);
 		tmp->child1 = n;
 		tmp->child2 = statement();
+		tmp->parent = n->parent;
 		n = tmp;
 	}
+	puts("function ended");
 	return n;
 }
 node* statement()
@@ -95,6 +110,7 @@ node* statement()
 	if (lexemes[curLexeme]<FUNC_OPEN)
 	{
 		n->child1=createNode(lexemes[curLexeme]);
+		n->child1->parent = n;
 		curLexeme++;
 		if(curLexeme<lexemes.size())
 		{
@@ -102,6 +118,7 @@ node* statement()
 			node *tmp = createNode(STMT);
 			tmp->child1 = n;
 			tmp->child2 = statement();
+			tmp->parent = n->parent;
 			n = tmp;
 		}
 	}
@@ -113,7 +130,9 @@ node* statement()
 	{
 		if (curNode&&curNode->type==FUNC_OPEN)
 		{
-			n = createNode(FUNC_CLOSE);//when empty []
+			//n = createNode(FUNC_CLOSE);//when empty []
+			//curLexeme--;
+			n=NULL;
 		}
 		else
 		{
@@ -125,6 +144,7 @@ node* statement()
 	{
 		//Unknown Lexeme
 	}
+	puts("statement ended");
 	return n;
 }
 node* program()
