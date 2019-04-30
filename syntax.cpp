@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     */
 
     //Bottom works good
-    lexemes.push_back(CONSTANT);
+    /*lexemes.push_back(CONSTANT);
     lexemes.push_back(FUNC_OPEN);
     lexemes.push_back(FUNC_OPEN);
     lexemes.push_back(CONSTANT);
@@ -72,12 +72,15 @@ int main(int argc, char **argv)
     lexemes.push_back(CONSTANT);
     lexemes.push_back(CONSTANT);
     lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_CLOSE);
+    */
+
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_OPEN);
+
+    lexemes.push_back(FUNC_CLOSE);
     lexemes.push_back(FUNC_CLOSE);
 
-    /*lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(FUNC_CLOSE);
-*/
 	node *tree = program();
 	for(size_t i=0;i<lexemes.size();i++)
 	{
@@ -111,8 +114,8 @@ node* function()
 	}
 	n->child2->parent = n;
 	curLexeme++;
-	printf("%d\n",curLexeme);
-	printf("%d\n",n->child2->type);
+	printf("cL=%d\n",curLexeme);
+	printf("n->ch2->type=%d\n",n->child2->type);
 	if (n->child2->type != FUNC_CLOSE)
 	{
 
@@ -132,10 +135,16 @@ node* function()
 	}
 	if(curLexeme<lexemes.size())
 	{
-
-		puts("S->SS");
+		puts("S->SS(after function)");
 		node *tmp = createNode(STMT);
 		tmp->child1 = n;
+        if (n->parent)
+            curNode = n->parent->child1;
+        else
+            curNode = n;//new
+
+        //printf("n->type:%d\n",n->parent->type);
+
 		tmp->child2 = statement();
 		tmp->parent = n->parent;
 		n = tmp;
@@ -159,6 +168,7 @@ node* statement()
 			puts("S->SS");
 			node *tmp = createNode(STMT);
 			tmp->child1 = n;
+			curNode = n;//new
 			tmp->child2 = statement();
 			tmp->parent = n->parent;
 			n = tmp;
@@ -188,6 +198,7 @@ node* statement()
 			//Missing '[' here
 			puts("Error: Missing '[' here");
 		}
+		//puts("Error: Missing '[' here");
 	}
 	else
 	{
