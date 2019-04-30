@@ -37,15 +37,47 @@ int main(int argc, char **argv)
 	lexemes.push_back(CONSTANT);
 	lexemes.push_back(MULT);
 	*/
-	lexemes.push_back(FUNC_OPEN);
-	//lexemes.push_back(CONSTANT);
-	lexemes.push_back(FUNC_OPEN);
-	lexemes.push_back(FUNC_CLOSE);
-	lexemes.push_back(NAME);
+	/*lexemes.push_back(FUNC_OPEN);
+        lexemes.push_back(CONSTANT);
+
+        lexemes.push_back(FUNC_OPEN);
+        lexemes.push_back(CONSTANT);
+        lexemes.push_back(FUNC_CLOSE);
+
+        lexemes.push_back(PLUS);
+
+        lexemes.push_back(FUNC_OPEN);
+        lexemes.push_back(CONSTANT);
+        lexemes.push_back(FUNC_CLOSE);
 	lexemes.push_back(FUNC_CLOSE);
 	lexemes.push_back(CONSTANT);
     lexemes.push_back(CONSTANT);
+    */
 
+    //Bottom works good
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(CONSTANT);
+    lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_CLOSE);
+
+    /*lexemes.push_back(FUNC_OPEN);
+    lexemes.push_back(FUNC_CLOSE);
+    lexemes.push_back(FUNC_CLOSE);
+*/
 	node *tree = program();
 	for(size_t i=0;i<lexemes.size();i++)
 	{
@@ -90,6 +122,7 @@ node* function()
 			n->child3->parent = n;
 			if (n->parent)
 				curNode = n->parent->child1;
+            curLexeme++;
 		}
 		else if(curLexeme>=lexemes.size())
 		{
@@ -99,6 +132,7 @@ node* function()
 	}
 	if(curLexeme<lexemes.size())
 	{
+
 		puts("S->SS");
 		node *tmp = createNode(STMT);
 		tmp->child1 = n;
@@ -119,6 +153,7 @@ node* statement()
 		n->child1->parent = n;
 		curLexeme++;
 		//TODO: Nothing do here
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
 		if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
 		{
 			puts("S->SS");
@@ -128,8 +163,12 @@ node* statement()
 			tmp->parent = n->parent;
 			n = tmp;
 		}
-		//else
-        //  curLexeme--;
+		else if(lexemes[curLexeme]==FUNC_CLOSE)
+        {
+            puts("closed ]");
+            curLexeme--;
+            //n=NULL;
+        }
 	}
 	else if (lexemes[curLexeme]==FUNC_OPEN)
 	{
@@ -141,8 +180,8 @@ node* statement()
 		if (curNode&&curNode->type==FUNC_OPEN)
 		{
 			//n = createNode(FUNC_CLOSE);//when empty []
-			//curLexeme--;
-			n=NULL;
+			curLexeme--;
+			//n=NULL;
 		}
 		else
 		{
