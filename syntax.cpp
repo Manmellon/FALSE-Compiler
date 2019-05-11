@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     lexemes.push_back(FUNC_CLOSE);
     */
 	
-    lexemes.push_back(FUNC_OPEN);
+    //lexemes.push_back(FUNC_OPEN);
     lexemes.push_back(FUNC_OPEN);
     lexemes.push_back(FUNC_CLOSE);
     lexemes.push_back(FUNC_CLOSE);
@@ -115,7 +115,7 @@ node* function()
 	}
 	//n->child2->parent = n;
 	curLexeme++;
-	printf("cL=%d\n",curLexeme);
+	printf("1.cL=%d\n",curLexeme);
 	printf("n->ch2->type=%d\n",n->child2->type);
 	if (n->child2->type != FUNC_CLOSE)
 	{
@@ -135,24 +135,34 @@ node* function()
 			puts("Error: Missing ']' here");
 		}
 	}
-	if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
+	printf("2.cL=%d\n",curLexeme);
+	/*if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
 	{
-		puts("S->SS(after function)");
-		node *tmp = createNode(STMT);
-		tmp->child1 = n;
-        //if (n->parent)
-        //    curNode = n->parent->child1;
-        //else
-        //   curNode = n;//new
+		if(lexemes[curLexeme]!=FUNC_CLOSE)
+		{
+			puts("S->SS(after function)");
+			node *tmp = createNode(STMT);
+			tmp->child1 = n;
+			//if (n->parent)
+			//    curNode = n->parent->child1;
+			//else
+			//   curNode = n;//new
 
-        //printf("n->type:%d\n",n->parent->type);
+			//printf("n->type:%d\n",n->parent->type);
 
-		tmp->child2 = statement();
-		//tmp->parent = n->parent;
-		n = tmp;
+			tmp->child2 = statement();
+			//tmp->parent = n->parent;
+			n = tmp;
+		}
+		else
+		{
+			puts("Error: Missing '[' here");
+		}
 	}
 	else
+	{
 		curLexeme--;
+	}*/
 	puts("function ended");
 	return n;
 }
@@ -186,11 +196,36 @@ node* statement()
 	}
 	else if (lexemes[curLexeme]==FUNC_OPEN)
 	{
+		node* prevCurNode=curNode;
 		n = function();
+		curNode = prevCurNode;
+		puts("returned from func to stat");
+		if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
+		{
+			puts("S->SS(after function)");
+			node *tmp = createNode(STMT);
+			tmp->child1 = n;
+			//if (n->parent)
+			//    curNode = n->parent->child1;
+			//else
+			//   curNode = n;//new
+			//printf("n->type:%d\n",n->parent->type);
+			tmp->child2 = statement();
+			//tmp->parent = n->parent;
+			n = tmp;
+		}
+		else
+		{
+			if(lexemes[curLexeme]==FUNC_CLOSE&&(!curNode||curNode->type!=FUNC_OPEN))
+				puts("Error: Missing '[' here");
+			curLexeme--;
+		}
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
 	}
 	else if (lexemes[curLexeme]==FUNC_CLOSE)
 	{
-	    printf("cL:']' curNode->type:%d\n",curNode->type);
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
+	    printf("curNode->type:%d\n",curNode->type);
 		if (curNode&&curNode->type==FUNC_OPEN)
 		{
 			//n = createNode(FUNC_CLOSE);//when empty []
@@ -199,7 +234,6 @@ node* statement()
 		}
 		else
 		{
-			//Missing '[' here
 			puts("Error: Missing '[' here");
 		}
 		//puts("Error: Missing '[' here");
@@ -233,6 +267,7 @@ void printTree(node *t)//C 1 2 3
 		printTree(t->child3);
 		printf(") ");
 		*/
+		
 		if (t->type<STMT) printf("%d ",t->type);
 		printTree(t->child1);
 		printTree(t->child2);
