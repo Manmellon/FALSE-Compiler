@@ -2,9 +2,12 @@
 #include "lexic.h"
 #include "syntax.h"
 #include "generator.h"
+extern vector<int> nums;
+extern vector<string> ids;
+extern vector<lexeme> lexemes;
 int main(int argc, char **argv)
 {
-	vector<lexeme> lexemes;
+	//vector<lexeme> lexemes;
 	string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
 	lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)

@@ -6,8 +6,8 @@
 #include "lexic.h"
 using namespace std;
 
-extern vector<int> nums;
-extern vector<string> ids;
+vector<int> nums;
+vector<string> ids;
 vector<lexeme> strToLexemes(string str)
 {
 	vector<lexeme> ans;
