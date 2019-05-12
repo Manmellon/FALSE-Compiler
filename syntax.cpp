@@ -1,10 +1,12 @@
 #include <cstdio>
 #include <iostream>
 #include <vector>
+
+#include "lexeme.h"
 using namespace std;
-enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
-			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
-const int STMT = ERROR+1;
+//enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
+//			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
+//const int STMT = ERROR+1;
 
 size_t curLexeme;
 vector<lexeme> lexemes;
@@ -13,11 +15,12 @@ struct node
 {
 	struct node *child1,*child2,*child3;
 	//struct node *parent;
-	int type, value;
+	lexeme lex;
+	//int type, value;
 };
 node *curNode;
 
-node* createNode(int _type);
+node* createNode(lexeme _lex);
 node* function();
 node* statement();
 node* program();
@@ -76,24 +79,28 @@ int main(int argc, char **argv)
     */
 	
     //lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(FUNC_CLOSE);
+    lexeme tmpLexeme;
+    tmpLexeme.type = FUNC_OPEN;
+    lexemes.push_back(tmpLexeme);
+    tmpLexeme.type = FUNC_CLOSE;
+    lexemes.push_back(tmpLexeme);
+    tmpLexeme.type = FUNC_CLOSE;
+    lexemes.push_back(tmpLexeme);
 	
 	node *tree = program();
 	for(size_t i=0;i<lexemes.size();i++)
 	{
-		printf("%d ",lexemes[i]);
+		printf("%d ",lexemes[i].type);
 	}
 	puts("");
 	printTree(tree);
 	return 0;
 }
 
-node* createNode(int _type)
+node* createNode(lexeme _lex)
 {
 	node *n = new node;
-	n->type = _type;
+	n->lex = _lex;
 	n->child1=n->child2=n->child3=NULL;
 	//n->parent=NULL;
 	return n;
@@ -101,8 +108,11 @@ node* createNode(int _type)
 node* function()
 {
 	puts("function started");
-	node *n=createNode(STMT);
-	n->child1 = createNode(FUNC_OPEN);
+	lexeme tmpLexeme;
+	tmpLexeme.type = STMT;
+	node *n=createNode(tmpLexeme);
+	tmpLexeme.type = FUNC_OPEN;
+	n->child1 = createNode(tmpLexeme);
 	//n->child1->parent = n;
 	curLexeme++;
 	curNode = n->child1;
@@ -111,18 +121,20 @@ node* function()
 	puts("returned to func");
 	if(n->child2==NULL)
 	{
-		n->child2 = createNode(FUNC_CLOSE);
+		tmpLexeme.type = FUNC_CLOSE;
+		n->child2 = createNode(tmpLexeme);
 	}
 	//n->child2->parent = n;
 	curLexeme++;
 	printf("1.cL=%d\n",curLexeme);
-	printf("n->ch2->type=%d\n",n->child2->type);
-	if (n->child2->type != FUNC_CLOSE)
+	printf("n->ch2->type=%d\n",n->child2->lex.type);
+	if (n->child2->lex.type != FUNC_CLOSE)
 	{
 
-		if (lexemes[curLexeme]==FUNC_CLOSE)
+		if (lexemes[curLexeme].type==FUNC_CLOSE)
 		{
-			n->child3 = createNode(FUNC_CLOSE);
+			tmpLexeme.type = FUNC_CLOSE;
+			n->child3 = createNode(tmpLexeme);
 			//n->child3->parent = n;
 			//if (n->parent)
 			//	curNode = n->parent->child1;
@@ -169,41 +181,45 @@ node* function()
 node* statement()
 {
 	puts("statement started");
-	node *n = createNode(STMT);
-	if (lexemes[curLexeme]<FUNC_OPEN)
+	lexeme tmpLexeme;
+	tmpLexeme.type = STMT;
+	node *n = createNode(tmpLexeme);
+	if (lexemes[curLexeme].type<FUNC_OPEN)
 	{
 		n->child1=createNode(lexemes[curLexeme]);
 		//n->child1->parent = n;
 		curLexeme++;
 		//TODO: Nothing do here
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
-		if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
+		if(curLexeme<lexemes.size()&&lexemes[curLexeme].type!=FUNC_CLOSE)
 		{
 			puts("S->SS");
-			node *tmp = createNode(STMT);
+			tmpLexeme.type = STMT;
+			node *tmp = createNode(tmpLexeme);
 			tmp->child1 = n;
 			//curNode = n;//new
 			tmp->child2 = statement();
 			//tmp->parent = n->parent;
 			n = tmp;
 		}
-		else if(lexemes[curLexeme]==FUNC_CLOSE)
+		else if(lexemes[curLexeme].type==FUNC_CLOSE)
         {
             puts("closed ]");
             curLexeme--;
             //n=NULL;
         }
 	}
-	else if (lexemes[curLexeme]==FUNC_OPEN)
+	else if (lexemes[curLexeme].type==FUNC_OPEN)
 	{
 		node* prevCurNode=curNode;
 		n = function();
 		curNode = prevCurNode;
 		puts("returned from func to stat");
-		if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
+		if(curLexeme<lexemes.size()&&lexemes[curLexeme].type!=FUNC_CLOSE)
 		{
 			puts("S->SS(after function)");
-			node *tmp = createNode(STMT);
+			tmpLexeme.type = STMT;
+			node *tmp = createNode(tmpLexeme);
 			tmp->child1 = n;
 			//if (n->parent)
 			//    curNode = n->parent->child1;
@@ -216,17 +232,17 @@ node* statement()
 		}
 		else
 		{
-			if(lexemes[curLexeme]==FUNC_CLOSE&&(!curNode||curNode->type!=FUNC_OPEN))
+			if(lexemes[curLexeme].type==FUNC_CLOSE&&(!curNode||curNode->lex.type!=FUNC_OPEN))
 				puts("Error: Missing '[' here");
 			curLexeme--;
 		}
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
 	}
-	else if (lexemes[curLexeme]==FUNC_CLOSE)
+	else if (lexemes[curLexeme].type==FUNC_CLOSE)
 	{
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme]);
-	    printf("curNode->type:%d\n",curNode->type);
-		if (curNode&&curNode->type==FUNC_OPEN)
+		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
+	    printf("curNode->type:%d\n",curNode->lex.type);
+		if (curNode&&curNode->lex.type==FUNC_OPEN)
 		{
 			//n = createNode(FUNC_CLOSE);//when empty []
 			curLexeme--;
@@ -268,7 +284,7 @@ void printTree(node *t)//C 1 2 3
 		printf(") ");
 		*/
 		
-		if (t->type<STMT) printf("%d ",t->type);
+		if (t->lex.type<STMT) printf("%d ",t->lex.type);
 		printTree(t->child1);
 		printTree(t->child2);
 		printTree(t->child3);
