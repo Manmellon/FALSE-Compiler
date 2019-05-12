@@ -2,61 +2,18 @@
 #include <iostream>
 #include <vector>
 
-#include "lexeme.h"
+#include "syntax.h"
 using namespace std;
-//enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
-//			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
-//const int STMT = ERROR+1;
-
 size_t curLexeme;
 vector<lexeme> lexemes;
 
-struct node
-{
-	struct node *child1,*child2,*child3;
-	//struct node *parent;
-	lexeme lex;
-	//int type, value;
-};
+
 node *curNode;
 
-node* createNode(lexeme _lex);
-node* function();
-node* statement();
-node* program();
-void printTree(node *t);
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
 	curLexeme = 0;
-	/*lexemes.push_back(FUNC_OPEN);
-	lexemes.push_back(DUP);
-	lexemes.push_back(MULT);
-	lexemes.push_back(FUNC_CLOSE);
-	lexemes.push_back(NAME);
-	lexemes.push_back((lexeme)0);//number from name's table
-	lexemes.push_back(ASSIGNMENT);
 	*/
-	/*lexemes.push_back(CONSTANT);
-	lexemes.push_back(CONSTANT);
-	lexemes.push_back(MULT);
-	*/
-	/*lexemes.push_back(FUNC_OPEN);
-        lexemes.push_back(CONSTANT);
-
-        lexemes.push_back(FUNC_OPEN);
-        lexemes.push_back(CONSTANT);
-        lexemes.push_back(FUNC_CLOSE);
-
-        lexemes.push_back(PLUS);
-
-        lexemes.push_back(FUNC_OPEN);
-        lexemes.push_back(CONSTANT);
-        lexemes.push_back(FUNC_CLOSE);
-	lexemes.push_back(FUNC_CLOSE);
-	lexemes.push_back(CONSTANT);
-    lexemes.push_back(CONSTANT);
-    */
-
     //Bottom works good
     /*lexemes.push_back(CONSTANT);
     lexemes.push_back(FUNC_OPEN);
@@ -79,7 +36,7 @@ int main(int argc, char **argv)
     */
 	
     //lexemes.push_back(FUNC_OPEN);
-    lexeme tmpLexeme;
+    /*lexeme tmpLexeme;
     tmpLexeme.type = FUNC_OPEN;
     lexemes.push_back(tmpLexeme);
     tmpLexeme.type = FUNC_CLOSE;
@@ -96,6 +53,7 @@ int main(int argc, char **argv)
 	printTree(tree);
 	return 0;
 }
+*/
 
 node* createNode(lexeme _lex)
 {

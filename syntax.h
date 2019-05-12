@@ -1,6 +1,6 @@
 #ifndef SYNTAX_H_
 #define SYNTAX_H_
-#include "lexic.h"
+#include "lexeme.h"
 struct node
 {
 	struct node *child1,*child2,*child3;

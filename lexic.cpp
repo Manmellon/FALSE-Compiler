@@ -3,12 +3,11 @@
 #include <string>
 #include <cstdlib>
 
-#include "lexeme.h"
+#include "lexic.h"
 using namespace std;
-//enum lexeme{NAME,CONSTANT,PLUS,MINUS,MULT,DIV,ASSIGNMENT,OPPNUMBER,EQUAL,
-//			AND,OR,DUP,DROP,SWAP,PUT,ROT,IF,WHILE,FUNC_OPEN,FUNC_CLOSE,ERROR};
-vector<int> nums;
-vector<string> ids;
+
+extern vector<int> nums;
+extern vector<string> ids;
 vector<lexeme> strToLexemes(string str)
 {
 	vector<lexeme> ans;
@@ -184,11 +183,12 @@ vector<lexeme> strToLexemes(string str)
 	cout<<"Total symbols: "<<str.size()<<"\nTotal lines: "<<lineNum<<" \n\n";
 	return ans;
 }
+/*
 int main(int argc, char **argv)
 {
-	vector<lexeme> lexemes;
-	string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
-	lexemes = strToLexemes(str);
+	vector<lexeme> lexemes;*/
+	//string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
+	/*lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)
 	{
 		cout<<str[i];
@@ -211,3 +211,4 @@ int main(int argc, char **argv)
 	cout<<endl;
 	return 0;
 }
+*/

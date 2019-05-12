@@ -4,7 +4,5 @@
 #include <string>
 using namespace std;
 #include "lexeme.h"
-vector<int> nums;
-vector<string> ids;
 vector<lexeme> strToLexemes(string str);
 #endif
