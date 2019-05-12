@@ -141,7 +141,6 @@ node* statement()
 	lexeme tmpLexeme;
 	tmpLexeme.type = STMT;
 	node *n = createNode(tmpLexeme);
-	printf("%d\n",lexemes.size());
 	if (lexemes[curLexeme].type<FUNC_OPEN)
 	{
 		n->child1=createNode(lexemes[curLexeme]);

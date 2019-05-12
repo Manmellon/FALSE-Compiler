@@ -8,7 +8,8 @@ extern vector<lexeme> lexemes;
 int main(int argc, char **argv)
 {
 	//vector<lexeme> lexemes;
-	string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
+	//string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
+	string str = "23[[name[[47super]]56][]]pi314[]";
 	lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)
 	{
