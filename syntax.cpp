@@ -64,7 +64,7 @@ node* createNode(lexeme _lex)
 }
 node* function()
 {
-	puts("function started");
+	//puts("function started");
 	lexeme tmpLexeme;
 	tmpLexeme.type = STMT;
 	node *n=createNode(tmpLexeme);
@@ -75,7 +75,7 @@ node* function()
 	curNode = n->child1;
 	n->child2 = statement();
 	curNode = n->child1;
-	puts("returned to func");
+	//puts("returned to func");
 	if(n->child2==NULL)
 	{
 		tmpLexeme.type = FUNC_CLOSE;
@@ -83,8 +83,8 @@ node* function()
 	}
 	//n->child2->parent = n;
 	curLexeme++;
-	printf("1.cL=%d\n",curLexeme);
-	printf("n->ch2->type=%d\n",n->child2->lex.type);
+	//printf("1.cL=%d\n",curLexeme);
+	//printf("n->ch2->type=%d\n",n->child2->lex.type);
 	if (n->child2->lex.type != FUNC_CLOSE)
 	{
 
@@ -104,7 +104,7 @@ node* function()
 			puts("Error: Missing ']' here");
 		}
 	}
-	printf("2.cL=%d\n",curLexeme);
+	//printf("2.cL=%d\n",curLexeme);
 	/*if(curLexeme<lexemes.size()&&lexemes[curLexeme]!=FUNC_CLOSE)
 	{
 		if(lexemes[curLexeme]!=FUNC_CLOSE)
@@ -132,12 +132,12 @@ node* function()
 	{
 		curLexeme--;
 	}*/
-	puts("function ended");
+	//puts("function ended");
 	return n;
 }
 node* statement()
 {
-	puts("statement started");
+	//puts("statement started");
 	lexeme tmpLexeme;
 	tmpLexeme.type = STMT;
 	node *n = createNode(tmpLexeme);
@@ -147,10 +147,10 @@ node* statement()
 		//n->child1->parent = n;
 		curLexeme++;
 		//TODO: Nothing do here
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
+		//printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
 		if(curLexeme<lexemes.size()&&lexemes[curLexeme].type!=FUNC_CLOSE)
 		{
-			puts("S->SS");
+			//puts("S->SS");
 			tmpLexeme.type = STMT;
 			node *tmp = createNode(tmpLexeme);
 			tmp->child1 = n;
@@ -161,7 +161,7 @@ node* statement()
 		}
 		else if(lexemes[curLexeme].type==FUNC_CLOSE)
         {
-            puts("closed ]");
+            //puts("closed ]");
             curLexeme--;
             //n=NULL;
         }
@@ -171,10 +171,10 @@ node* statement()
 		node* prevCurNode=curNode;
 		n = function();
 		curNode = prevCurNode;
-		puts("returned from func to stat");
+		//puts("returned from func to stat");
 		if(curLexeme<lexemes.size()&&lexemes[curLexeme].type!=FUNC_CLOSE)
 		{
-			puts("S->SS(after function)");
+			//puts("S->SS(after function)");
 			tmpLexeme.type = STMT;
 			node *tmp = createNode(tmpLexeme);
 			tmp->child1 = n;
@@ -193,12 +193,12 @@ node* statement()
 				puts("Error: Missing '[' here");
 			curLexeme--;
 		}
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
+		//printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
 	}
 	else if (lexemes[curLexeme].type==FUNC_CLOSE)
 	{
-		printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
-	    printf("curNode->type:%d\n",curNode->lex.type);
+		//printf("cl = %d, l[cL] = %d\n",curLexeme,lexemes[curLexeme].type);
+	    //printf("curNode->type:%d\n",curNode->lex.type);
 		if (curNode&&curNode->lex.type==FUNC_OPEN)
 		{
 			//n = createNode(FUNC_CLOSE);//when empty []
@@ -215,7 +215,7 @@ node* statement()
 	{
 		//Unknown Lexeme
 	}
-	puts("statement ended");
+	//puts("statement ended");
 	return n;
 }
 node* program()
