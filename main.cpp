@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	
 	node* tree = program();
 	printTree(tree);
-	
+	cout<<endl;
 	string code = treeToCode(tree);
 	cout<<code;
 	return 0;
