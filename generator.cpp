@@ -1,6 +1,9 @@
 #include <string>
+#include <vector>
 using namespace std;
 #include "generator.h"
+extern vector<int> nums;
+extern vector<string> ids;
 string treeToCode(node* tree)
 {
 	string code;
@@ -9,5 +12,13 @@ string treeToCode(node* tree)
 	
 	code+="mov ax, 0x4c00\n";
 	code+="int 0x21\n";
+	if(nums.size())
+	{
+		code+="SECTION .rodata\n";
+	}
+	if(ids.size())
+	{
+		code+="SECTION .bss\n";
+	}
 	return code;
 }
