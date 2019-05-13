@@ -1,3 +1,4 @@
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -15,6 +16,12 @@ string treeToCode(node* tree)
 	if(nums.size())
 	{
 		code+="SECTION .rodata\n";
+		for(size_t i=0;i<nums.size();i++)
+		{
+			stringstream hexNum;
+			hexNum<<hex<<nums[i];
+			code+="dd 0x"+hexNum.str()+"\n";
+		}
 	}
 	if(ids.size())
 	{
