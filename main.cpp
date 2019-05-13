@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
 #include "lexic.h"
 #include "syntax.h"
 #include "generator.h"
@@ -35,6 +38,7 @@ int main(int argc, char **argv)
 	node* tree = program();
 	printTree(tree);
 	
-	
+	string code = treeToCode(tree);
+	cout<<code;
 	return 0;
 }
