@@ -8,9 +8,13 @@ extern vector<string> ids;
 string treeToCode(node* tree)
 {
 	string code;
+	bool isFloatStack=false;
 	code+="SECTION .text\n";
 	code+="org 0x100\n";
-	
+	switch(tree->lex.type)
+	{
+		case STMT:treeToCode(tree->child1);treeToCode(tree->child2);break;
+	}
 	code+="mov ax, 0x4c00\n";
 	code+="int 0x21\n";
 	if(nums.size())
