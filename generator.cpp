@@ -33,6 +33,7 @@ string generateCode(node* tree)
 	{
 		code+="SECTION .bss\n";
 		code+="vars:\n";
+		code+="resd "+to_string(ids.size())+"\n";
 		
 	}
 	return code;
