@@ -24,14 +24,16 @@ string generateCode(node* tree)
 		code+="consts:\n";
 		for(size_t i=0;i<nums.size();i++)
 		{
-			stringstream hexNum;
-			hexNum<<hex<<nums[i];
-			code+="dd 0x"+hexNum.str()+"\n";
+			//stringstream hexNum;
+			//hexNum<<hex<<nums[i];
+			code+="dd "+to_string(nums[i])+"\n";//hexNum.str()+"\n";
 		}
 	}
 	if(ids.size())
 	{
 		code+="SECTION .bss\n";
+		code+="vars:\n";
+		
 	}
 	return code;
 }
@@ -113,9 +115,27 @@ string treeToCode(node* tree)
 		}break;
 		case ASSIGNMENT:
 		{
+			if(isFloatStack)
+			{
+				code+="fstp \n";
+			}
+			else
+			{
+				code+="pop \n";
+			}
 		}break;
 		case OPPNUMBER:
 		{
+			if(isFloatStack)
+			{
+				code+="fstp eax\n";
+				code+="fld \n";
+			}
+			else
+			{
+				code+="pop eax\nnot eax\npush eax\n";
+			}
+
 		}break;
 		case EQUAL:
 		{
