@@ -85,9 +85,31 @@ string treeToCode(node* tree)
 		}break;
 		case MULT:
 		{
+			if(isFloatStack)
+			{
+				code+="fld \n";
+				code+="fld \n";
+				code+="fmul\n";
+				
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nimul ebx\npush eax\n";
+			}
 		}break;
 		case DIV:
 		{
+			if(isFloatStack)
+			{
+				code+="fld \n";
+				code+="fld \n";
+				code+="fdiv\n";
+				
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nidiv ebx\npush eax\n";
+			}
 		}break;
 		case ASSIGNMENT:
 		{
