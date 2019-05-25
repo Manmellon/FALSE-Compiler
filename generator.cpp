@@ -53,15 +53,35 @@ string treeToCode(node* tree)
 		{
 			if(isFloatStack)code+="fld ";
 			else code+="push ";
-			code+="consts+"+to_string(tree->lex.value);
-			code+="\n";
+			code+="consts+"+to_string(tree->lex.value)+"\n";
 		}break;
 		case PLUS:
 		{
-			
+			if(isFloatStack)
+			{
+				code+="fld \n";
+				code+="fld \n";
+				code+="fadd\n";
+				
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nadd eax,ebx\npush eax\n";
+			}
 		}break;
 		case MINUS:
 		{
+			if(isFloatStack)
+			{
+				code+="fld \n";
+				code+="fld \n";
+				code+="fsub\n";
+				
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nsub eax,ebx\npush eax\n";
+			}
 		}break;
 		case MULT:
 		{
