@@ -21,6 +21,7 @@ string generateCode(node* tree)
 	if(nums.size())
 	{
 		code+="SECTION .rodata\n";
+		code+="consts:\n";
 		for(size_t i=0;i<nums.size();i++)
 		{
 			stringstream hexNum;
@@ -50,9 +51,14 @@ string treeToCode(node* tree)
 		}break;
 		case CONSTANT:
 		{
+			if(isFloatStack)code+="fld ";
+			else code+="push ";
+			code+="consts+"+to_string(tree->lex.value);
+			code+="\n";
 		}break;
 		case PLUS:
 		{
+			
 		}break;
 		case MINUS:
 		{
