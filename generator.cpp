@@ -55,8 +55,8 @@ string treeToCode(node* tree)
 		case CONSTANT:
 		{
 			if(isFloatStack)code+="fld ";
-			else code+="push ";
-			code+="consts+"+to_string(tree->lex.value)+"\n";
+			else code+="push dword "+to_string(nums[tree->lex.value])+"\n";
+			//code+="[consts+"+to_string(tree->lex.value)+"]\n";
 		}break;
 		case PLUS:
 		{

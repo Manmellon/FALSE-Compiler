@@ -13,6 +13,7 @@ vector<lexeme> strToLexemes(string str)
 	vector<lexeme> ans;
 	bool readingName = false;
 	bool readingNumber = false;
+	bool readingFloatNumber = false;
 	bool readingCommentary = false;
 	string readingStr;
 	int lineNum = 1, columnNum=0;
@@ -82,6 +83,27 @@ vector<lexeme> strToLexemes(string str)
                     readingStr+=str[i];
                 }
             }
+            else if(str[i]==0xAB)//float
+            {
+				if (readingName)
+                {
+                    flag=0;
+                    size_t i;
+                    for (i=0;i<ids.size();i++)
+                    {
+                        if (readingStr==ids[i]) flag=1;
+                    }
+                    if (!flag) ids.push_back(readingStr);
+                    tmpLexeme.type = NAME;
+                    tmpLexeme.value = i;
+                    ans.push_back(tmpLexeme);
+                    readingName = false;
+                }
+                else if (readingNumber)
+                {
+					readingFloatNumber = true;
+				}
+			}
             else
             {
                 if (readingName)
