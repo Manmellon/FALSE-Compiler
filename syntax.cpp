@@ -245,5 +245,6 @@ void printTree(node *t)//C 1 2 3
 		printTree(t->child1);
 		printTree(t->child2);
 		printTree(t->child3);
+		
 	}
 }

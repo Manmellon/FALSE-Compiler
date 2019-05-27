@@ -5,6 +5,7 @@
 using namespace std;
 #include "generator.h"
 extern vector<int> intConsts;
+extern vector<float> floatConsts;
 extern vector<string> ids;
 bool isFloatStack;
 string generateCode(node* tree)
@@ -41,7 +42,7 @@ string generateCode(node* tree)
 string treeToCode(node* tree)
 {
 	string code;
-	//cout<<tree->child1->lex.type;
+	//cout<<"HELP ME\n";
 	switch(tree->lex.type)
 	{
 		case STMT:
@@ -51,21 +52,56 @@ string treeToCode(node* tree)
 		}break;
 		case NAME:
 		{
+			code+="mov ebx, [vars+"+to_string(tree->lex.value)+"]\n";
+			if(isFloatStack)
+			{
+				code+="fld ebx\n";
+			}
+			else
+			{
+				code+="push ebx\n";
+			}
 		}break;
-		case CONSTANT:
+		case INT_CONST:
 		{
-			if(isFloatStack)code+="fld ";
-			else code+="push dword "+to_string(intConsts[tree->lex.value])+"\n";
+			//cout<<"HELP "<<tree->lex.value;
+			if(isFloatStack)
+			{
+				code+="fld ";
+			}
+			else
+			{
+				code+="push dword "+to_string(intConsts[tree->lex.value])+"\n";
+			}
 			//code+="[consts+"+to_string(tree->lex.value)+"]\n";
 		}break;
+		case FLOAT_CONST:
+		{
+			if(isFloatStack)
+			{
+				code+="fld ";
+			}
+			else
+			{
+				code+="push dword "+to_string((int)floatConsts[tree->lex.value])+"\n";
+			}
+		}break;
+		case NEG:
+		{
+			if(isFloatStack)
+			{
+				code+="fchs\n";
+			}
+			else
+			{
+				code+="pop eax\nneg eax\npush eax\n";
+			}
+		}
 		case PLUS:
 		{
 			if(isFloatStack)
 			{
-				code+="fld \n";
-				code+="fld \n";
-				code+="fadd\n";
-				
+				code+="fadd\n";	
 			}
 			else
 			{
@@ -76,10 +112,7 @@ string treeToCode(node* tree)
 		{
 			if(isFloatStack)
 			{
-				code+="fld \n";
-				code+="fld \n";
-				code+="fsub\n";
-				
+				code+="fsub\n";	
 			}
 			else
 			{
@@ -90,10 +123,7 @@ string treeToCode(node* tree)
 		{
 			if(isFloatStack)
 			{
-				code+="fld \n";
-				code+="fld \n";
-				code+="fmul\n";
-				
+				code+="fmul\n";	
 			}
 			else
 			{
@@ -104,10 +134,7 @@ string treeToCode(node* tree)
 		{
 			if(isFloatStack)
 			{
-				code+="fld \n";
-				code+="fld \n";
-				code+="fdiv\n";
-				
+				code+="fdiv\n";	
 			}
 			else
 			{
@@ -118,19 +145,22 @@ string treeToCode(node* tree)
 		{
 			if(isFloatStack)
 			{
-				code+="fstp \n";
+				code+="fstp ebx\n";
+				code+="fstp eax\n";
+				code+="mov [eax], ebx\n";
 			}
 			else
 			{
-				code+="pop \n";
+				code+="pop ebx\n";
+				code+="pop eax\n";
+				code+="mov [eax], ebx\n";
 			}
 		}break;
 		case OPPNUMBER:
 		{
 			if(isFloatStack)
 			{
-				code+="fstp eax\n";
-				code+="fld \n";
+				code+="fstp eax\nnot eax\nfld eax\n";
 			}
 			else
 			{

@@ -173,6 +173,7 @@ vector<lexeme> strToLexemes(string str)
 				case '-': tmpLexeme.type = MINUS;ans.push_back(tmpLexeme);break;
 				case '*': tmpLexeme.type = MULT;ans.push_back(tmpLexeme);break;
 				case '/': tmpLexeme.type = DIV;ans.push_back(tmpLexeme);break;
+				case '_': tmpLexeme.type = NEG;ans.push_back(tmpLexeme);break;
 				case ':': tmpLexeme.type = ASSIGNMENT;ans.push_back(tmpLexeme);break;
 				case '~': tmpLexeme.type = OPPNUMBER;ans.push_back(tmpLexeme);break;
 				case '=': tmpLexeme.type = EQUAL;ans.push_back(tmpLexeme);break;
