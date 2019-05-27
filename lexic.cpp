@@ -186,6 +186,9 @@ vector<lexeme> strToLexemes(string str)
 				case '@': tmpLexeme.type = ROT;ans.push_back(tmpLexeme);break;
 				case '?': tmpLexeme.type = IF;ans.push_back(tmpLexeme);break;
 				case '#': tmpLexeme.type = WHILE;ans.push_back(tmpLexeme);break;
+				case '!': tmpLexeme.type = CALL;ans.push_back(tmpLexeme);break;
+				case 2: tmpLexeme.type = CHANGE;ans.push_back(tmpLexeme);break;
+				case 3: tmpLexeme.type = SEND;ans.push_back(tmpLexeme);break;
 				case '[': tmpLexeme.type = FUNC_OPEN;ans.push_back(tmpLexeme);break;
 				case ']': tmpLexeme.type = FUNC_CLOSE;ans.push_back(tmpLexeme);break;
 				case ' ':break;

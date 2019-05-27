@@ -150,14 +150,16 @@ string treeToCode(node* tree)
 			if(isFloatStack)
 			{
 				code+="fstp ebx\n";
-				code+="fstp eax\n";
-				code+="mov [eax], ebx\n";
+				//code+="fstp eax\n";
+				//code+="mov [eax], ebx\n";
+				code+="fstp dword [bx]\n";
 			}
 			else
 			{
 				code+="pop ebx\n";
-				code+="pop eax\n";
-				code+="mov [eax], ebx\n";
+				//code+="pop eax\n";
+				//code+="mov [eax], ebx\n";
+				code+="pop dword [bx]\n";
 			}
 		}break;
 		case OPPNUMBER:
@@ -258,6 +260,16 @@ string treeToCode(node* tree)
 		}break;
 		case PUT:
 		{
+			if(isFloatStack)
+			{
+				code+="fstp ebx\n";
+				code+="fld dword [bx]\n";
+			}
+			else
+			{
+				code+="pop ebx\n";
+				code+="push dword [bx]\n";
+			}
 		}break;
 		case ROT:
 		{
@@ -276,6 +288,31 @@ string treeToCode(node* tree)
 		case WHILE:
 		{
 		}break;
+		case CALL:
+		{
+			if(isFloatStack)
+            {
+				code+="fstp ebx\njmp bx\n";
+			}
+			else
+			{
+				code+="pop ebx\njmp bx\n";
+			}
+		}break;
+		case CHANGE:
+		{
+			isFloatStack = !isFloatStack;
+		}break;
+		case SEND:
+		{
+			if(isFloatStack)
+            {
+			}
+			else
+			{
+				code+="pop eax\nfild eax\n";
+			}
+		}
 		case FUNC_OPEN:
 		{
 			funcCount++;
@@ -290,6 +327,7 @@ string treeToCode(node* tree)
 		{
 			//cout<<"IM HERE\n";
 			code+="fc"+to_string(funcNumbers[funcNumbers.size()-1])+":\n";
+			code+="push fo"+to_string(funcNumbers[funcNumbers.size()-1])+"\n";
 			funcNumbers.pop_back();
 		}break;
 		default:break;
