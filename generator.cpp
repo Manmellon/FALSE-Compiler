@@ -4,7 +4,7 @@
 #include <iostream>//delete
 using namespace std;
 #include "generator.h"
-extern vector<int> nums;
+extern vector<int> intConsts;
 extern vector<string> ids;
 bool isFloatStack;
 string generateCode(node* tree)
@@ -18,15 +18,15 @@ string generateCode(node* tree)
 	
 	code+="mov ax, 0x4c00\n";
 	code+="int 0x21\n";
-	if(nums.size())
+	if(intConsts.size())
 	{
 		code+="SECTION .rodata\n";
 		code+="consts:\n";
-		for(size_t i=0;i<nums.size();i++)
+		for(size_t i=0;i<intConsts.size();i++)
 		{
 			//stringstream hexNum;
-			//hexNum<<hex<<nums[i];
-			code+="dd "+to_string(nums[i])+"\n";//hexNum.str()+"\n";
+			//hexNum<<hex<<intConsts[i];
+			code+="dd "+to_string(intConsts[i])+"\n";//hexNum.str()+"\n";
 		}
 	}
 	if(ids.size())
@@ -55,7 +55,7 @@ string treeToCode(node* tree)
 		case CONSTANT:
 		{
 			if(isFloatStack)code+="fld ";
-			else code+="push dword "+to_string(nums[tree->lex.value])+"\n";
+			else code+="push dword "+to_string(intConsts[tree->lex.value])+"\n";
 			//code+="[consts+"+to_string(tree->lex.value)+"]\n";
 		}break;
 		case PLUS:
