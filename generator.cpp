@@ -186,24 +186,89 @@ string treeToCode(node* tree)
 		}break;
 		case AND:
 		{
+			if(isFloatStack)
+			{
+				code+="fstp ebx\nfstp eax\n";
+			}
+			else
+			{
+				code+="pop ebx\npop eax\n";
+            }
+            code+="or eax, eax\nsetne al\nor ebx, ebx\nsetne bl\nand al, bl\nneg al\nmovsx eax, al\n";
+            if(isFloatStack)
+            {
+				code+="fld eax\n";
+			}
+			else
+			{
+				code+="push eax\n";
+			}
 		}break;
 		case OR:
 		{
+			if(isFloatStack)
+			{
+			}
+			else
+			{
+				code+="pop ebx\npop eax\n";
+            }
+            code+="or eax, eax\nsetne al\nor ebx, ebx\nsetne bl\nor al, bl\nneg al\nmovsx eax, al\n";
+            if(isFloatStack)
+            {
+				code+="fld eax\n";
+			}
+			else
+			{
+				code+="push eax\n";
+			}
 		}break;
 		case DUP:
 		{
+			if(isFloatStack)
+            {
+				code+="fstp eax\nfld eax\nfld eax\n";
+			}
+			else
+			{
+				code+="pop eax\npush eax\npush eax\n";
+			}
 		}break;
 		case DROP:
 		{
+			if(isFloatStack)
+            {
+				code+="fstp eax\n";
+			}
+			else
+			{
+				code+="pop eax\n";
+			}
 		}break;
 		case SWAP:
 		{
+			if(isFloatStack)
+            {
+				code+="fstp ebx\nfstp eax\nfld ebx\nfld eax\n";
+			}
+			else
+			{
+				code+="pop ebx\npop eax\npush ebx\npush eax\n";
+			}
 		}break;
 		case PUT:
 		{
 		}break;
 		case ROT:
 		{
+			if(isFloatStack)
+            {
+				code+="fstp ecx\nfstp ebx\nfstp eax\nfld ebx\nfld ecx\nfld eax\n";
+			}
+			else
+			{
+				code+="pop ecx\npop ebx\npop eax\npush ebx\npush ecx\npush eax\n";
+			}
 		}break;
 		case IF:
 		{
