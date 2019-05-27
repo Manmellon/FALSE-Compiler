@@ -8,10 +8,13 @@ extern vector<int> intConsts;
 extern vector<float> floatConsts;
 extern vector<string> ids;
 bool isFloatStack;
+int funcCount;
+vector<int> funcNumbers;
 string generateCode(node* tree)
 {
 	string code;
 	isFloatStack=false;
+	funcCount=-1;
 	code+="SECTION .text\n";
 	code+="org 0x100\n";
 	
@@ -42,13 +45,14 @@ string generateCode(node* tree)
 string treeToCode(node* tree)
 {
 	string code;
-	//cout<<"HELP ME\n";
+	//cout<<tree->lex.type<<"\n";
 	switch(tree->lex.type)
 	{
 		case STMT:
 		{
 			if(tree->child1)code+=treeToCode(tree->child1);//looks bad
 			if(tree->child2)code+=treeToCode(tree->child2);
+			if(tree->child3)code+=treeToCode(tree->child3);
 		}break;
 		case NAME:
 		{
@@ -170,6 +174,15 @@ string treeToCode(node* tree)
 		}break;
 		case EQUAL:
 		{
+			if(isFloatStack)
+			{
+				code+="fcom\n";
+				//code+="";//we need push bool then
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nsub eax, ebx\nsub eax, 1\nsbb eax, eax\npush eax\n";
+			}
 		}break;
 		case AND:
 		{
@@ -200,9 +213,19 @@ string treeToCode(node* tree)
 		}break;
 		case FUNC_OPEN:
 		{
+			funcCount++;
+			code+="jmp fc"+to_string(funcCount)+"\n";
+			code+="fo"+to_string(funcCount)+":\n";
+			funcNumbers.push_back(funcCount);
+
+			//if(tree->child2)code+=treeToCode(tree->child2);
+			//if(tree->child3)code+=treeToCode(tree->child3);
 		}break;
 		case FUNC_CLOSE:
 		{
+			//cout<<"IM HERE\n";
+			code+="fc"+to_string(funcNumbers[funcNumbers.size()-1])+":\n";
+			funcNumbers.pop_back();
 		}break;
 		default:break;
 	}

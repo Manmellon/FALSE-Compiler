@@ -231,7 +231,8 @@ void printTree(node *t)//C 1 2 3
 {
 	if(t)
 	{
-		/*printf("(C:%d ",t->lex.type);
+		/*
+		printf("(C:%d ",t->lex.type);
 		printf("1c:");
 		printTree(t->child1);
 		printf("2c:");
