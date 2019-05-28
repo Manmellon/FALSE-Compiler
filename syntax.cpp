@@ -6,9 +6,13 @@
 using namespace std;
 size_t curLexeme;
 vector<lexeme> lexemes;
+extern vector<int> intConsts;
+extern vector<float> floatConsts;
+
 node *curNode;
 
 vector<int> arrSizes;
+
 
 node* createNode(lexeme _lex)
 {
@@ -93,7 +97,7 @@ node* function()
 }
 node* statement()
 {
-	//puts("statement started");
+	puts("statement started");
 	lexeme tmpLexeme;
 	tmpLexeme.type = STMT;
 	node *n = createNode(tmpLexeme);
@@ -186,7 +190,15 @@ node* statement()
 			{
 				tmpLexeme.type=ARRAY_CLOSE;
 				n->child3 = createNode(tmpLexeme);
-				arrSizes.push_back((int)lexemes[curLexeme].value);
+				
+				if(lexemes[curLexeme-1].type==INT_CONST)
+				{
+					arrSizes.push_back(intConsts[lexemes[curLexeme-1].value]);
+				}
+				else
+				{
+					arrSizes.push_back((int)floatConsts[lexemes[curLexeme-1].value]);
+				}
 			}
 			else
 			{
@@ -199,21 +211,21 @@ node* statement()
 				//after array
 				tmpLexeme.type = STMT;
 				node *tmp = createNode(tmpLexeme);
-				cout<<"CYKA N ="<<n<<endl;
+				//cout<<"CYKA N ="<<n<<endl;
 				tmp->child1 = n;
 				tmp->child2 = statement();
 				n = tmp;
 			}
 			else
 			{
-				curLexeme--;
+				//curLexeme--;
 			}
 		}
 		else if (lexemes[curLexeme].type==ARRAY_CLOSE)
 		{
 			tmpLexeme.type=ARRAY_CLOSE;
 			n->child3 = createNode(tmpLexeme);
-			arrSizes.push_back((int)lexemes[curLexeme].value);
+			arrSizes.push_back(1);
 			curLexeme++;
 			if(curLexeme<lexemes.size())
 			{
