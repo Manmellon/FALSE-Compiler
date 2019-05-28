@@ -177,6 +177,8 @@ vector<lexeme> strToLexemes(string str)
 				case ':': tmpLexeme.type = ASSIGNMENT;ans.push_back(tmpLexeme);break;
 				case '~': tmpLexeme.type = OPPNUMBER;ans.push_back(tmpLexeme);break;
 				case '=': tmpLexeme.type = EQUAL;ans.push_back(tmpLexeme);break;
+				case '>': tmpLexeme.type = MORE;ans.push_back(tmpLexeme);break;
+				case '<': tmpLexeme.type = LESS;ans.push_back(tmpLexeme);break;
 				case '&': tmpLexeme.type = AND;ans.push_back(tmpLexeme);break;
 				case '|': tmpLexeme.type = OR;ans.push_back(tmpLexeme);break;
 				case '$': tmpLexeme.type = DUP;ans.push_back(tmpLexeme);break;
@@ -191,6 +193,8 @@ vector<lexeme> strToLexemes(string str)
 				case 3: tmpLexeme.type = SEND;ans.push_back(tmpLexeme);break;
 				case '[': tmpLexeme.type = FUNC_OPEN;ans.push_back(tmpLexeme);break;
 				case ']': tmpLexeme.type = FUNC_CLOSE;ans.push_back(tmpLexeme);break;
+				case '(': tmpLexeme.type = ARRAY_OPEN;ans.push_back(tmpLexeme);break;
+				case ')': tmpLexeme.type = ARRAY_CLOSE;ans.push_back(tmpLexeme);break;
 				case ' ':break;
 				case '\n':break;
 				default:

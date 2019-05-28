@@ -11,6 +11,7 @@ extern vector<int> intConsts;
 extern vector<float> floatConsts;
 extern vector<string> ids;
 extern vector<lexeme> lexemes;
+extern vector<int> arrSizes;
 int main(int argc, char **argv)
 {
 	
@@ -55,7 +56,12 @@ int main(int argc, char **argv)
 		cout<<ids[i]<<' ';
 	}
 	cout<<endl;
-	
+	cout<<endl<<"arrays: ";
+	for (size_t i=0;i<arrSizes.size();i++)
+	{
+		cout<<arrSizes[i]<<' ';
+	}
+	cout<<endl;
 	node* tree = program();
 	printTree(tree);
 	cout<<endl;

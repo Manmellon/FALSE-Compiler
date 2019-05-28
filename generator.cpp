@@ -179,11 +179,33 @@ string treeToCode(node* tree)
 			if(isFloatStack)
 			{
 				code+="fcom\n";
-				//code+="";//we need push bool then
+				//code+="";//we need push bool then(register CR?)
 			}
 			else
 			{
 				code+="pop ebx\npop eax\nsub eax, ebx\nsub eax, 1\nsbb eax, eax\npush eax\n";
+			}
+		}break;
+		case MORE:
+		{
+			if(isFloatStack)
+			{
+				code+="fcom\n";
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nsub ecx, ecx\ncmp eax, ebx\njle .local\ndec ecx\n.local:\npush ecx\n";
+			}
+		}break;
+		case LESS:
+		{
+			if(isFloatStack)
+			{
+				code+="fcom\n";
+			}
+			else
+			{
+				code+="pop ebx\npop eax\nsub ecx, ecx\ncmp eax, ebx\njge .local\ndec ecx\n.local:\npush ecx\n";
 			}
 		}break;
 		case AND:

@@ -6,53 +6,9 @@
 using namespace std;
 size_t curLexeme;
 vector<lexeme> lexemes;
-
 node *curNode;
 
-/*int main(int argc, char **argv)
-{
-	curLexeme = 0;
-	*/
-    //Bottom works good
-    /*lexemes.push_back(CONSTANT);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(CONSTANT);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(CONSTANT);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(CONSTANT);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(FUNC_CLOSE);
-    lexemes.push_back(CONSTANT);
-    lexemes.push_back(CONSTANT);
-    lexemes.push_back(FUNC_OPEN);
-    lexemes.push_back(FUNC_CLOSE);
-    */
-	
-    //lexemes.push_back(FUNC_OPEN);
-    /*lexeme tmpLexeme;
-    tmpLexeme.type = FUNC_OPEN;
-    lexemes.push_back(tmpLexeme);
-    tmpLexeme.type = FUNC_CLOSE;
-    lexemes.push_back(tmpLexeme);
-    tmpLexeme.type = FUNC_CLOSE;
-    lexemes.push_back(tmpLexeme);
-	
-	node *tree = program();
-	for(size_t i=0;i<lexemes.size();i++)
-	{
-		printf("%d ",lexemes[i].type);
-	}
-	puts("");
-	printTree(tree);
-	return 0;
-}
-*/
+vector<int> arrSizes;
 
 node* createNode(lexeme _lex)
 {
@@ -141,6 +97,7 @@ node* statement()
 	lexeme tmpLexeme;
 	tmpLexeme.type = STMT;
 	node *n = createNode(tmpLexeme);
+	
 	if (lexemes[curLexeme].type<FUNC_OPEN)
 	{
 		n->child1=createNode(lexemes[curLexeme]);
@@ -210,6 +167,48 @@ node* statement()
 			puts("Error: Missing '[' here");
 		}
 		//puts("Error: Missing '[' here");
+	}
+	else if (lexemes[curLexeme].type==ARRAY_OPEN)
+	{
+		lexeme tmpLexeme;
+		tmpLexeme.type=ARRAY_OPEN;
+		n->child1 = createNode(tmpLexeme);
+		//node* prevCurNode=curNode;
+		//curNode = n->child1;
+		curLexeme++;
+		if (lexemes[curLexeme].type==INT_CONST||
+			lexemes[curLexeme].type==FLOAT_CONST)
+		{
+			tmpLexeme.type=lexemes[curLexeme].type;
+			n->child2 = createNode(tmpLexeme);
+			curLexeme++;
+			if (lexemes[curLexeme].type==ARRAY_CLOSE)
+			{
+				tmpLexeme.type=ARRAY_CLOSE;
+				n->child3 = createNode(tmpLexeme);
+				arrSizes.push_back((int)lexemes[curLexeme].value);
+			}
+			else
+			{
+				puts("Error: Missing ')' here");
+				//curLexeme--;
+			}
+		}
+		else if (lexemes[curLexeme].type==ARRAY_CLOSE)
+		{
+			tmpLexeme.type=ARRAY_CLOSE;
+			n->child3 = createNode(tmpLexeme);
+			arrSizes.push_back((int)lexemes[curLexeme].value);
+		}
+		else
+		{
+			puts("Error: array init must contain number or nothing");
+		}
+		
+	}
+	else if (lexemes[curLexeme].type==ARRAY_CLOSE)
+	{
+		puts("Error: Missing '(' here");
 	}
 	else
 	{
