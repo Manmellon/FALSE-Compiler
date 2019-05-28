@@ -1,4 +1,6 @@
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -11,11 +13,22 @@ extern vector<string> ids;
 extern vector<lexeme> lexemes;
 int main(int argc, char **argv)
 {
+	
 	//string str = "SANYA@8name+ 234 6+-*/*-\nnamme2+-#\nfuck 99 7^98 fuck+fock_feck3fick";
-	string str = "23[[name[[47super]]56][]]pi3";
-	str+=1;//(char)0xAB;//its 1/2
-	str+="14[]";
+	//string str = "23[[name[[47super]]56][]]pi3";
+	//str+=1;//(char)0xAB;//its 1/2
+	//str+="14[]";
 	//string str = "[2]";
+	string str;
+	if (argc>1)
+	{
+		ifstream input(argv[1]);
+		stringstream buffer;
+		buffer<<input.rdbuf();
+		str = buffer.str();
+	}
+	
+	
 	lexemes = strToLexemes(str);
 	for (size_t i=0;i<str.size();i++)
 	{
@@ -48,5 +61,9 @@ int main(int argc, char **argv)
 	cout<<endl;
 	string code = generateCode(tree);
 	cout<<code;
+	
+	ofstream output("a.asm");
+	output<<code;
+	output.close();
 	return 0;
 }
