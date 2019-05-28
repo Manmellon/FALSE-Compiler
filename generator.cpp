@@ -328,7 +328,6 @@ string treeToCode(node* tree)
 			}
 			else
 			{
-			
 				labelCount++;
 				code+="pop ebx\npop eax\nor eax, eax\nje l"+to_string(labelCount)+
 				"jmp bx\nl"+to_string(labelCount)+":\n";
@@ -336,6 +335,15 @@ string treeToCode(node* tree)
 		}break;
 		case WHILE:
 		{
+			if(isFloatStack)
+            {
+			}
+			else
+			{
+				labelCount++;
+				code+="pop ebx\npop eax\nsub bp, 4\nmov word [bp], bx\nmov word [bp + 2], ax\nmov bx, word [bp + 2]\nsub bp, 2";
+				code+="jmp bx\npop eax\nor eax, eax\nje l"+to_string(labelCount)+"jmp bx\nl"+to_string(labelCount)+":\n";
+			}
 		}break;
 		case CALL:
 		{
