@@ -7,14 +7,17 @@ using namespace std;
 extern vector<int> intConsts;
 extern vector<float> floatConsts;
 extern vector<string> ids;
+extern vector<int> arrSizes;
 bool isFloatStack;
 int funcCount;
+int labelCount;
 vector<int> funcNumbers;
 string generateCode(node* tree)
 {
 	string code;
 	isFloatStack=false;
 	funcCount=-1;
+	labelCount=-1;
 	code+="SECTION .text\n";
 	code+="org 0x100\n";
 	
@@ -22,7 +25,7 @@ string generateCode(node* tree)
 	
 	code+="mov ax, 0x4c00\n";
 	code+="int 0x21\n";
-	if(intConsts.size())
+	/*if(intConsts.size())
 	{
 		code+="SECTION .rodata\n";
 		code+="consts:\n";
@@ -32,20 +35,32 @@ string generateCode(node* tree)
 			//hexNum<<hex<<intConsts[i];
 			code+="dd "+to_string(intConsts[i])+"\n";//hexNum.str()+"\n";
 		}
-	}
-	if(ids.size())
+	}*/
+	if(ids.size()||arrSizes.size())
 	{
 		code+="SECTION .bss\n";
-		code+="vars:\n";
-		code+="resd "+to_string(ids.size())+"\n";
-		
+		if(ids.size())
+		{
+			code+="vars:\n";
+			code+="resd "+to_string(ids.size())+"\n";
+			
+		}
+		cout<<"arrsize="<<arrSizes.size()<<endl;
+		if (arrSizes.size())
+		{
+			for(size_t i=0;i<arrSizes.size();i++)
+			{
+				code+="arr"+to_string(i)+":"+to_string(arrSizes[i])+"\n";
+			}
+			
+		}
 	}
 	return code;
 }
 string treeToCode(node* tree)
 {
 	string code;
-	//cout<<tree->lex.type<<"\n";
+	cout<<tree->lex.type<<"\n";
 	switch(tree->lex.type)
 	{
 		case STMT:
@@ -194,7 +209,9 @@ string treeToCode(node* tree)
 			}
 			else
 			{
-				code+="pop ebx\npop eax\nsub ecx, ecx\ncmp eax, ebx\njle .local\ndec ecx\n.local:\npush ecx\n";
+				labelCount++;
+				code+="pop ebx\npop eax\nsub ecx, ecx\ncmp eax, ebx\njle l"
+				+to_string(labelCount)+"\ndec ecx\nl"+to_string(labelCount)+":\npush ecx\n";
 			}
 		}break;
 		case LESS:
@@ -306,6 +323,16 @@ string treeToCode(node* tree)
 		}break;
 		case IF:
 		{
+			if(isFloatStack)
+            {
+			}
+			else
+			{
+			
+				labelCount++;
+				code+="pop ebx\npop eax\nor eax, eax\nje l"+to_string(labelCount)+
+				"jmp bx\nl"+to_string(labelCount)+":\n";
+			}
 		}break;
 		case WHILE:
 		{

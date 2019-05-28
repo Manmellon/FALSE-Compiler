@@ -193,12 +193,41 @@ node* statement()
 				puts("Error: Missing ')' here");
 				//curLexeme--;
 			}
+			curLexeme++;
+			if(curLexeme<lexemes.size())
+			{
+				//after array
+				tmpLexeme.type = STMT;
+				node *tmp = createNode(tmpLexeme);
+				cout<<"CYKA N ="<<n<<endl;
+				tmp->child1 = n;
+				tmp->child2 = statement();
+				n = tmp;
+			}
+			else
+			{
+				curLexeme--;
+			}
 		}
 		else if (lexemes[curLexeme].type==ARRAY_CLOSE)
 		{
 			tmpLexeme.type=ARRAY_CLOSE;
 			n->child3 = createNode(tmpLexeme);
 			arrSizes.push_back((int)lexemes[curLexeme].value);
+			curLexeme++;
+			if(curLexeme<lexemes.size())
+			{
+				//after array
+				tmpLexeme.type = STMT;
+				node *tmp = createNode(tmpLexeme);
+				tmp->child1 = n;
+				tmp->child2 = statement();
+				n = tmp;
+			}
+			else
+			{
+				//curLexeme--;
+			}
 		}
 		else
 		{
